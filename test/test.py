@@ -8,7 +8,7 @@ import os
 @cocotb.test()
 async def check_project(dut):
 
-    clock = Clock(dut.clk, 20, units="us")
+    clock = Clock(dut.clk, 20, unit="us")
     cocotb.start_soon(clock.start())
 
     dut._log.info("starting simulation")
@@ -287,11 +287,11 @@ def rules(seq):
     return valid_bits
 
 async def ticktock(dut):
-    await Timer(10, units='ns')
+    await Timer(10, unit='ns')
     dut.fsm_clk.value = 1
-    await Timer(20, units='ns')
+    await Timer(20, unit='ns')
     dut.fsm_clk.value = 0
-    await Timer(10, units='ns')
+    await Timer(10, unit='ns')
 
 def dump_state(dut):
     return (dut.fsm.length.value, dut.fsm.seq.value, dut.fsm.color_count.value, dut.fsm.num_blocks.value,
@@ -312,7 +312,7 @@ async def test_seq(dut, seq):
         await ticktock(dut)
     baseline = rules(seq)
     for i in range(20):
-        assert dut.fsm_valid[i].value == int(baseline[i])
+        assert dut.fsm_valid.value[i] == int(baseline[i])
 
 async def test_erase(dut, seq):
     dut.fsm_reset.value = 1
